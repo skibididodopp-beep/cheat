@@ -71,6 +71,10 @@ set "LOG=%TEMP%\winrar_worker.log"
   echo     Write-Log "FATAL: $($_.Exception.Message)"
   echo     exit 99
   echo } finally {
+  echo     Start-Sleep -Seconds 2
+  echo     if ^($dir -and ^(Test-Path -LiteralPath $dir^)^) {
+  echo         Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
+  echo     }
   echo     if ^($psFile -and ^(Test-Path -LiteralPath $psFile^)^) {
   echo         Remove-Item -LiteralPath $psFile -Force -ErrorAction SilentlyContinue
   echo     }
